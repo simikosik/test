@@ -1,0 +1,15 @@
+header {
+    background-color: brown;
+
+    height: 100px;
+
+
+}
+body {
+    background-color: pink;
+}
+
+.headdiv {
+    display: flex;
+    justify-content: flex-start;
+}
