@@ -1,0 +1,19 @@
+header {
+    background-color: brown;
+
+    height: 100px;
+
+
+}
+body {
+    background-color: pink;
+}
+
+.headdiv {
+    display: flex;
+    justify-content: flex-start;
+}
+img {
+    height:100px;
+    width: 100px;
+}
