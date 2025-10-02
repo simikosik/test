@@ -1,0 +1,15 @@
+<li>
+  <h3>{{ index() + 1 }}. {{ quest().title }}</h3>
+  <p>{{ quest().description }}</p>
+  <p><strong>XP:</strong> {{ quest().xp }}</p>
+
+  @if (quest().xp >= 1000) {
+    <span style="color: red; font-weight: bold;">SUPER XP!</span>
+  } @else if (quest().xp >= 100) {
+    <span style="color: green; font-weight: bold;">mega XP!</span>
+  } @else if (quest().xp >= 10) {
+    <span style="color: blue; font-weight: bold;">normal XP!</span>
+  }
+
+  <button (click)="onRemove()" style="position: absolute; right: 5; top: 5;">X</button>
+</li>
