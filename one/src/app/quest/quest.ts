@@ -1,56 +1,44 @@
 import { Component } from '@angular/core';
 import { Questsit } from '../questsit';
 import { QuestItem } from '../quest-item/quest-item';
+import { QuestService } from '../quest-service';
 
 @Component({
   selector: 'app-quest',
-  imports: [QuestItem],
   standalone: true,
+  imports: [QuestItem],
   templateUrl: './quest.html',
-  styleUrl: './quest.css'
+  styleUrls: ['./quest.css']
 })
 export class Quest {
-  questData: Questsit = {
-    id: 1,
-    title: "Quest",
-    description: "Najdi zmysel zivota",
-    xp: 10
-  };
-  questData1: Questsit = {
-    id: 1,
-    title: "Quest",
-    description: "Zlyhaj v tom co robis",
-    xp: 105
-  };
-  questData2: Questsit = {
-    id: 1,
-    title: "Quest",
-    description: "Choj spat",
-    xp: 1012
-  };
-  quests = [this.questData1,this.questData2, this.questData]
+  quests: Questsit[] = [];
 
+  constructor(private questsService: QuestService) {
+    
+    this.quests = this.questsService.getQuests();
+  }
 
- addQuest() {
-    const NEWXP = Math.floor(Math.random() * 1250) + 10;
+  addQuest() {
     const maxId = this.quests.length > 0 
       ? Math.max(...this.quests.map(q => q.id)) 
       : 0;
 
+    const titles = ['CHoj Spat', 'Najdi zmysel zivota', 'Vyjeb sa na to', 'Repeat ts'];
+    const NEWXP = Math.floor(Math.random() * 1000) + 10;
+
     const newQuest: Questsit = {
       id: maxId + 1,
-      xp: NEWXP + 1,
-      title: 'New Quest',
-      description: 'This is a newly added quest.',
-    
+      title: titles[Math.floor(Math.random() * titles.length)],
+      description: 'A randomly generated quest.',
+      xp: NEWXP
     };
 
-    this.quests = [...this.quests, newQuest]; 
+    this.questsService.addQuest(newQuest);
+    this.quests = this.questsService.getQuests();
   }
-
 
   removeQuest(id: number) {
-    this.quests = this.quests.filter(q => q.id !== id);
+    this.questsService.removeQuest(id);
+    this.quests = this.questsService.getQuests();
   }
 }
-
