@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Questsit } from './questsit';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
+ 
 export class QuestService {
+   constructor() {
+    console.log('Service instance created.');
+   }
   questData: Questsit = {
     id: 1,
     title: "Quest",

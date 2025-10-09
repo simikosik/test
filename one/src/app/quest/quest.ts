@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Questsit } from '../questsit';
 import { QuestItem } from '../quest-item/quest-item';
 import { QuestService } from '../quest-service';
@@ -8,19 +8,25 @@ import { QuestService } from '../quest-service';
   standalone: true,
   imports: [QuestItem],
   templateUrl: './quest.html',
-  styleUrls: ['./quest.css']
+  styleUrls: ['./quest.css'],
+  providers: [QuestService]
 })
-export class Quest {
+export class Quest implements OnInit, OnDestroy {
   quests: Questsit[] = [];
 
   constructor(private questsService: QuestService) {
-    
+
     this.quests = this.questsService.getQuests();
   }
-
+  ngOnInit(): void {
+    console.log('Quests component initialized.');
+  }
+  ngOnDestroy(): void {
+    console.log('Quests component destroyed.');
+  }
   addQuest() {
-    const maxId = this.quests.length > 0 
-      ? Math.max(...this.quests.map(q => q.id)) 
+    const maxId = this.quests.length > 0
+      ? Math.max(...this.quests.map(q => q.id))
       : 0;
 
     const titles = ['CHoj Spat', 'Najdi zmysel zivota', 'Vyjeb sa na to', 'Repeat ts'];

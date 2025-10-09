@@ -12,6 +12,7 @@
     <h1>Quest Overflow</h1>
   </div>
  </header>
- <app-quest></app-quest>
+ <button (click)="toggle()">Toggle quests</button>
+ <app-quest  *ngIf="showQuests"></app-quest>
 </body>
 </html>
