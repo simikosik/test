@@ -1,0 +1,14 @@
+<p>quests works!</p>
+<ul>
+    @for (quest of quests; track quest.id; let i = $index) { 
+    <app-quest-item [quest]="quest" [index]="i" ></app-quest-item>
+      
+    
+    
+    
+    
+}
+@empty {
+    <li>Nahanaju ma bestie</li>
+    }
+</ul>

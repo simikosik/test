@@ -1,0 +1,16 @@
+<li>
+    
+    <h3>{{ index() + 1}} {{quest().title}}</h3>
+    <p> {{quest().description}}</p>
+    @if (quest().xp >= 1000) {
+
+    <p style="color:rgb(117, 24, 117); font-weight: bold;">MEGA XP: {{quest().xp}}</p>
+    }
+    @else if (quest().xp >= 100){
+    <p style="color:blue; font-weight: bold;">Super XP: {{quest().xp}}</p>
+    }
+    @else{
+    <p style="color:green; font-weight: bold;">Normal XP: {{quest().xp}}</p>
+    }
+    
+</li>
