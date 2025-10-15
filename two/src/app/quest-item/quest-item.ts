@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { QuestInterface } from '../quest-interface';
 
 @Component({
@@ -10,4 +10,9 @@ import { QuestInterface } from '../quest-interface';
 export class QuestItem {
 quest = input.required<QuestInterface>();
 index = input.required<number>();
+deletequest = output<number>();
+
+onRemove() {
+  this.deletequest.emit(this.quest().id);
+}
 }

@@ -1,12 +1,13 @@
 <p>quests works!</p>
+<button (click)="addQuest()">Add New Quest</button>
 <ul>
     @for (quest of quests; track quest.id; let i = $index) { 
-    <app-quest-item [quest]="quest" [index]="i" ></app-quest-item>
+    <app-quest-item [quest]="quest" [index]="i" (deletequest)="removeQuest($event)"></app-quest-item>
       
     
     
     
-    
+        
 }
 @empty {
     <li>Nahanaju ma bestie</li>
