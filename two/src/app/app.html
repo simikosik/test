@@ -7,11 +7,20 @@
 </head>
 <body>
   <header>
+
     <div class="headdiv">
       <img src="https://static.thenounproject.com/png/1279710-200.png" alt="">
       <h1>Quest Overflow</h1>
     </div>
   </header>
-  <app-quests></app-quests>
+ <nav>
+  <a routerLink="">Home</a> |
+  <a routerLink="quests">Quests</a>
+</nav>
+
+<hr>
+
+<router-outlet></router-outlet>
+ 
 </body>
 </html>

@@ -19,7 +19,10 @@ export class QuestService {
   
     }
     private quests = [this.quest1, this.quest2, this.quest3];
-
+    
+    constructor() {
+    console.log('Service instance created.');
+  }
     getQuests(){
       return [...this.quests]};
 }

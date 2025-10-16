@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { QuestInterface } from '../quest-interface';
 import { QuestItem } from '../quest-item/quest-item';
 import { QuestService } from '../quest-service';
@@ -9,7 +9,7 @@ import { QuestService } from '../quest-service';
   styleUrl: './quests.css',
   standalone: true
 })
-export class Quests {
+export class Quests implements OnInit, OnDestroy {
   questService = inject(QuestService);
   quests = this.questService.getQuests();
   
@@ -26,6 +26,14 @@ export class Quests {
   removeQuest(id: number) {
     this.quests = this.quests.filter(q => q.id !== id);
   }
+  ngOnInit() {
+    console.log('Quests component initialized.');
+  }
+
+  ngOnDestroy() {
+    console.log('Quests component destroyed.');
+  }
 }
+
 
 
