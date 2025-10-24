@@ -25,4 +25,7 @@ export class QuestService {
   }
     getQuests(){
       return [...this.quests]};
+   getQuestsbyId(id: number) {
+    return this.quests.find(q => q.id === id);
+   }
 }

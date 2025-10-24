@@ -1,6 +1,6 @@
 <li>
     
-    <h3>{{ index() + 1}} {{quest().title}}</h3>
+    <h3 >{{ index() + 1}} {{quest().title}}</h3>
     <p> {{quest().description}}</p>
     @if (quest().xp >= 1000) {
 
@@ -12,5 +12,8 @@
     @else{
     <p style="color:green; font-weight: bold;">Normal XP: {{quest().xp}}</p>
     }
+    <nav>
+        <a [routerLink]="['/quests', quest().id]">detail</a>
+      </nav><br>
     <button (click)="onRemove()">remove</button>
 </li>

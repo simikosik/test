@@ -1,9 +1,12 @@
 import { Component, input, output } from '@angular/core';
 import { QuestInterface } from '../quest-interface';
+import { RouterLink } from '@angular/router';
+
 
 @Component({
   selector: 'app-quest-item',
-  imports: [],
+  imports: [RouterLink],
+  standalone: true,
   templateUrl: './quest-item.html',
   styleUrl: './quest-item.css'
 })
