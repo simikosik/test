@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { QuestInterface } from '../quest-interface';
 import { QuestItem } from '../quest-item/quest-item';
 import { QuestService } from '../quest-service';
@@ -7,21 +8,24 @@ import { QuestService } from '../quest-service';
 @Component({
   selector: 'app-quest-detail',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './quest-detail.html',
   styleUrl: './quest-detail.css'
 })
 export class QuestDetail {
   quest: any;
-  route: ActivatedRoute = inject(ActivatedRoute);
-  questService = inject(QuestService);
+  
  
+  constructor(
+    private route: ActivatedRoute,
+    private questService: QuestService
+  ) {}
 
-  
   ngOnInit() {
-    const id = Number(this.route.snapshot.params['id']);
+    const id = Number(this.route.snapshot.paramMap.get('id'));
     this.quest = this.questService.getQuestsbyId(id);
-    }
+  }
+}
+    
   
 
-}

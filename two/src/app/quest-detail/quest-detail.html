@@ -1,4 +1,7 @@
-<h1>cauko kakavko</h1><br>
-<p>toto je detailova page pre {{quest().title}}</p><br>
-<h1>description</h1><br>
-<p>{{quest().description}}</p>
+
+@if (quest) {
+    <h2>{{ quest.title }}</h2>
+    <img *ngIf="quest.image" [src]="quest.image" alt="Quest image">
+    <p>{{ quest.description }}</p>
+    <p><strong>XP:</strong> {{ quest.xp }}</p>
+}

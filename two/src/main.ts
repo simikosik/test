@@ -9,7 +9,7 @@ import { QuestDetail } from './app/quest-detail/quest-detail';
 const routes = [
   { path: '', component: Home },       
   { path: 'quests', component: Quests },
-  { path: 'quests/id', component: QuestDetail },
+  { path: 'quests/:id', component: QuestDetail },
  
   
 ];
