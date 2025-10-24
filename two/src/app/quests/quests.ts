@@ -12,8 +12,8 @@ import { QuestService } from '../quest-service';
 export class Quests implements OnInit, OnDestroy {
   questService = inject(QuestService);
   quests = this.questService.getQuests();
-  
-  
+
+
 
   addQuest() {
    var newId = this.quests.length + 1;
@@ -34,6 +34,7 @@ export class Quests implements OnInit, OnDestroy {
     console.log('Quests component destroyed.');
   }
 }
+
 
 
 
