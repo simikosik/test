@@ -1,0 +1,12 @@
+@if (player) {
+    <h2>{{ player.id }} {{player.nickname}}</h2>
+    <p>{{ player.clan }}</p>
+    <p><strong>level:</strong> {{ player.level }}</p>
+
+  <h4>Quests:</h4>
+<ul>
+  @for (quest of player.quests; track quest.id;) {
+    <li>{{ quest.title }} - {{ quest.description }} ({{ quest.xp }} XP)</li>
+  }
+</ul>
+}

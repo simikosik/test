@@ -1,0 +1,27 @@
+<ul>
+    <h1>Player list</h1>
+    <button (click)="addPlayer()">Add player</button>
+    @for (player of players; track player.id; ) {
+    <li>
+
+
+        <h3>{{ player.id}} {{player.nickname}}</h3>
+        <h3>{{ player.clan}}</h3>
+        @if (player.level >= 1000) {
+
+        <p style="color:rgb(117, 24, 117); font-weight: bold;">level: {{player.level}}</p>
+        }
+        @else if (player.level >= 100){
+        <p style="color:blue; font-weight: bold;">level: {{player.level}}</p>
+        }
+        @else{
+        <p style="color:green; font-weight: bold;">level: {{player.level}}</p>
+        }
+        <nav>
+            <a [routerLink]="['/players', player.id]">detail</a>
+        </nav><br>
+        <button (click)="onRemove(player)">remove</button>
+
+    </li>
+    }
+</ul>

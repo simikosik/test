@@ -29,4 +29,7 @@ export class QuestService {
    getQuestsbyId(id: number) {
     return this.quests.find(q => q.id === id);
    }
+   getDefaultQuests(): QuestInterface[] {
+  return this.getQuests().map(q => ({ ...q })); 
+}
 }
