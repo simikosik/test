@@ -1,0 +1,27 @@
+@if (clan) {
+  <h1>{{ clan.name }}</h1>
+  <p>{{ clan.description }}</p>
+  <p>Capacity: {{ clan.members.length }}/{{ clan.capacity }}</p>
+
+  <h3>Members:</h3>
+  <ul>
+    @for (player of clan.members; track player.id) {
+      <li>
+        <a [routerLink]="['/players', player.id]">
+          {{ player.nickname }} (Lv. {{ player.level }})
+        </a>
+        <button (click)="removePlayerFromClan(player)">Remove</button>
+      </li>
+    }
+  </ul>
+
+  <h3>Add Player:</h3>
+  <ul>
+    @for (player of allPlayers; track player.id) {
+      <li>
+        {{ player.nickname }}
+        <button (click)="addPlayerToClan(player)">Add</button>
+      </li>
+    }
+  </ul>
+}

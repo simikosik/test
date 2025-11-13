@@ -1,1 +1,17 @@
-<p>clans works!</p>
+<h1>Clans</h1>
+
+<button (click)="addClan()">Add Clan</button>
+
+<ul>
+    @for (clan of clans; track clan.id) {
+    <li>
+        <h3>{{ clan.name }}</h3>
+        <p>{{ clan.description }}</p>
+        <p>Capacity: {{ clan.members.length }}/{{ clan.capacity }}</p>
+        <nav>
+            <a [routerLink]="['/clans', clan.id]">details</a>
+        </nav><br>
+        <button (click)="deleteClan(clan)">Remove</button>
+    </li>
+    }
+</ul>

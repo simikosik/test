@@ -1,6 +1,6 @@
 @if (player) {
     <h2>{{ player.id }} {{player.nickname}}</h2>
-    <p>{{ player.clan }}</p>
+    <p><strong>Clan:</strong> {{ clanName ?? 'No clan' }}</p>
     <p><strong>level:</strong> {{ player.level }}</p>
 
   <h4>Quests:</h4>

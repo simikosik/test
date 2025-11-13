@@ -7,13 +7,18 @@ import { RouterOutlet, provideRouter } from '@angular/router';
 import { QuestDetail } from './app/quest-detail/quest-detail';
 import { Players } from './app/players/players';
 import { PlayerDetail } from './app/player-detail/player-detail';
+import { Clans } from './app/clans/clans';
+import { ClanDetail } from './app/clan-detail/clan-detail';
 
 const routes = [
   { path: '', component: Home },
   { path: 'quests', component: Quests },
   { path: 'quests/:id', component: QuestDetail },
   { path: 'players', component: Players },
-  { path: 'players/:id', component: PlayerDetail }
+  { path: 'players/:id', component: PlayerDetail },
+    { path: 'clans', component: Clans },
+  { path: 'clans/:id', component: ClanDetail },
+
   
 
 

@@ -7,9 +7,9 @@ import { QuestService } from './quest-service';
 })
 export class PlayerService {
   private players: PlayerInterface[] = [
-    { id: 1, nickname: 'P1', level: 25, clan: 'clan' },
-    { id: 2, nickname: 'P2', level: 2, clan: 'clan' },
-    { id: 3, nickname: 'P3', level: 125, clan: 'clan' }
+    { id: 1, nickname: 'P1', level: 25, clan: null  },
+    { id: 2, nickname: 'P2', level: 2, clan: null  },
+    { id: 3, nickname: 'P3', level: 125, clan: null }
   ];
 
   getPlayers(): PlayerInterface[] {

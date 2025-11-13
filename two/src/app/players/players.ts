@@ -39,7 +39,7 @@ export class Players {
       id: newId,
       nickname: name,
       level: newlvl,
-      clan: 'no',
+      clan: null,
       quests: this.questService.getDefaultQuests()
     };
     this.playerService.addPlayer(defaultplayer);
