@@ -31,5 +31,15 @@ export class QuestService {
    }
    getDefaultQuests(): QuestInterface[] {
   return this.getQuests().map(q => ({ ...q })); 
+
 }
+ addQuest(quest: QuestInterface) {
+    this.quests.push(quest);
+  }
+
+ 
+  removeQuest(id: number) {
+    this.quests = this.quests.filter(q => q.id !== id);
+  }
 }
+

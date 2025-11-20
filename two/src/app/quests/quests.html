@@ -1,15 +1,24 @@
 <p>quests works!</p>
-<button (click)="addQuest()">Add New Quest</button>
+<form [formGroup]="questForm">
+    <label for="new-title">Title:</label>
+    <input id="new-title" type="text" formControlName="newtitle">
+    <label for="new-desc">Description:</label>
+    <input id="new-desc" type="text" formControlName="newdesc">
+    <label for="new-xp">XP:</label>
+    <input id="new-xp" type="number" formControlName="newxp">
+    <button (click)="addQuest()">Add New Quest</button>
+</form>
+
 <ul>
-    @for (quest of quests; track quest.id; let i = $index) { 
+    @for (quest of quests; track quest.id; let i = $index) {
     <app-quest-item [quest]="quest" [index]="i" (deletequest)="removeQuest($event)"></app-quest-item>
-      
-    
-    
-    
-        
-}
-@empty {
+
+
+
+
+
+    }
+    @empty {
     <li>Nahanaju ma bestie</li>
     }
 </ul>

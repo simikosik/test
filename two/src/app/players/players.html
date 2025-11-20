@@ -1,6 +1,13 @@
 <ul>
     <h1>Player list</h1>
-    <button (click)="addPlayer()">Add player</button>
+    <form [formGroup]="playerForm"> 
+        <label for="new-id">ID:</label>
+        <input id="new-id" type="number" formControlName="newid">
+        <label for="new- nickname">Nickname:</label>
+        <input id="new-nickname" type="text" formControlName="newnickname">
+        <button (click)="addPlayer()">Add player</button>
+    </form>
+    
     @for (player of players; track player.id; ) {
     <li>
 

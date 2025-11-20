@@ -1,6 +1,14 @@
 <h1>Clans</h1>
+<form [formGroup]="clanForm">
+    <label for="new-name">Name:</label>
+    <input id="new-name" type="text" formControlName="newname">
+    <label for="new-desc">Description:</label>
+    <input id="new-desc" type="text" formControlName="newdesc">
+    <label for="new-cap">Capacity:</label>
+    <input id="new-cap" type="number" formControlName="newcapacity">
+    <button (click)="addClan()">Add Clan</button>
+</form>
 
-<button (click)="addClan()">Add Clan</button>
 
 <ul>
     @for (clan of clans; track clan.id) {
