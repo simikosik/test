@@ -6,35 +6,56 @@ import { QuestService } from './quest-service';
   providedIn: 'root'
 })
 export class PlayerService {
-  private players: PlayerInterface[] = [
-    { id: 1, nickname: 'P1', level: 25, clan: null  },
-    { id: 2, nickname: 'P2', level: 2, clan: null  },
-    { id: 3, nickname: 'P3', level: 125, clan: null }
-  ];
+  private players: PlayerInterface[] = [];
+
+  constructor(private questService: QuestService) {
+  
+    this.players = [
+      { 
+        id: 1, 
+        nickname: 'P1', 
+        xp: 25, 
+        clan: null, 
+        assignedQuests: [...this.questService.getDefaultQuests()],
+        completedQuests: []
+      },
+      { 
+        id: 2, 
+        nickname: 'P2', 
+        xp: 2, 
+        clan: null, 
+        assignedQuests: [...this.questService.getDefaultQuests()],
+        completedQuests: []
+      },
+      { 
+        id: 3, 
+        nickname: 'P3', 
+        xp: 125, 
+        clan: null, 
+        assignedQuests: [...this.questService.getDefaultQuests()],
+        completedQuests: []
+      }
+    ];
+  }
 
   getPlayers(): PlayerInterface[] {
     return this.players;
   }
 
- getPlayersbyId(id: number) {
-    return this.players.find(q => q.id === id);
- }
-constructor(private questService: QuestService) {
-
-  this.players.forEach(player => {
-    if (!player.quests) {
-      player.quests = this.questService.getDefaultQuests();
-    }
-  });
-}
-
- addPlayer(player: PlayerInterface) {
-  if (!player.quests) {
-    player.quests = this.questService.getDefaultQuests();
+ 
+  getPlayersbyId(id: number): PlayerInterface | undefined {
+    return this.players.find(p => p.id === id);
   }
-  this.players.push(player);
-}
 
+ 
+  addPlayer(player: PlayerInterface) {
+    
+    player.assignedQuests ??= [...this.questService.getDefaultQuests()];
+    player.completedQuests ??= [];
+    this.players.push(player);
+  }
+
+ 
   removePlayer(player: PlayerInterface): void {
     this.players = this.players.filter(p => p !== player);
   }

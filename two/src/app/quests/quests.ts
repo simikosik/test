@@ -2,7 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { QuestInterface } from '../quest-interface';
 import { QuestItem } from '../quest-item/quest-item';
 import { QuestService } from '../quest-service';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validator, Validators } from '@angular/forms';
 @Component({
   selector: 'app-quests',
   imports: [QuestItem, ReactiveFormsModule],
@@ -14,14 +14,15 @@ export class Quests implements OnInit, OnDestroy {
   questService = inject(QuestService);
   quests = this.questService.getQuests();
   questForm = new FormGroup({
-    newtitle: new FormControl(''),
-    newdesc: new FormControl(''),
-    newxp: new FormControl(null),
+    newtitle: new FormControl('', [ Validators.required, Validators.minLength(8)]),
+    newdesc: new FormControl('', [ Validators.required, Validators.minLength(8)]),
+    newxp: new FormControl(null, [ Validators.required, Validators.minLength(1)]),
   });
 
 
 
   addQuest() {
+    if (this.questForm.invalid) return;
     const formValues = this.questForm.value;
    var newId = this.quests.length + 1;
    var newTitle = formValues.newtitle!;

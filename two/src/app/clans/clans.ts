@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ClanService } from '../clan-service';
 import { ClanInterface } from '../clan-interface';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators, ValueChangeEvent } from '@angular/forms';
 
 @Component({
   selector: 'app-clans',
@@ -13,9 +13,9 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 export class Clans {
   clans: ClanInterface[] = [];
   clanForm = new FormGroup({
-    newname: new FormControl(''),
-    newdesc: new FormControl(''),
-    newcapacity: new FormControl(null),
+    newname: new FormControl('',[ Validators.required, Validators.minLength(8)] ),
+    newdesc: new FormControl('', [ Validators.required, Validators.minLength(8)]),
+    newcapacity: new FormControl(null, [ Validators.required, Validators.minLength(8)]),
   });
 
   constructor(private clanService: ClanService) {}
@@ -25,6 +25,7 @@ export class Clans {
   }
 
   addClan() {
+    if (this.clanForm.invalid) return;
     const formValues = this.clanForm.value
     const id = this.clans.length + 1;
     const newName = formValues.newname!;

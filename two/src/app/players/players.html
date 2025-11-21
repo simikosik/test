@@ -1,11 +1,12 @@
 <ul>
     <h1>Player list</h1>
     <form [formGroup]="playerForm"> 
-        <label for="new-id">ID:</label>
-        <input id="new-id" type="number" formControlName="newid">
-        <label for="new- nickname">Nickname:</label>
+        <label for="new-nickname">Nickname:</label>
         <input id="new-nickname" type="text" formControlName="newnickname">
-        <button (click)="addPlayer()">Add player</button>
+        @if (playerForm.get('newnickname')?.hasError('minlength')) {
+            <p>Nickname must be at least 8 characters.</p>
+          }
+        <button (click)="addPlayer()"  [disabled]="playerForm.invalid">Add player</button>
     </form>
     
     @for (player of players; track player.id; ) {
@@ -14,16 +15,19 @@
 
         <h3>{{ player.id}} {{player.nickname}}</h3>
         <h3>{{ player.clan}}</h3>
-        @if (player.level >= 1000) {
+        @if (player.xp >= 1000) {
 
-        <p style="color:rgb(117, 24, 117); font-weight: bold;">level: {{player.level}}</p>
+        <p style="color:rgb(117, 24, 117); font-weight: bold;">XP: {{player.xp}}</p>
         }
-        @else if (player.level >= 100){
-        <p style="color:blue; font-weight: bold;">level: {{player.level}}</p>
+        @else if (player.xp >= 100){
+        <p style="color:blue; font-weight: bold;">XP: {{player.xp}}</p>
         }
         @else{
-        <p style="color:green; font-weight: bold;">level: {{player.level}}</p>
+        <p style="color:green; font-weight: bold;">XP: {{player.xp}}</p>
         }
+        <p>Level: {{ getLevelData(player.xp).currentLevel.title }} ({{ getLevelData(player.xp).currentLevel.level }})</p>
+        <p>{{ getLevelData(player.xp).progress }}% to next level</p>
+        XP: {{ player.xp }} 
         <nav>
             <a [routerLink]="['/players', player.id]">detail</a>
         </nav><br>

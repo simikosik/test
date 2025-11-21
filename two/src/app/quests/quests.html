@@ -1,12 +1,19 @@
 <p>quests works!</p>
 <form [formGroup]="questForm">
     <label for="new-title">Title:</label>
-    <input id="new-title" type="text" formControlName="newtitle">
+    <input id="new-title" type="text"  formControlName="newtitle" required>
+    @if (questForm.get('newtitle')?.hasError('minlength')) {
+        <p>Title must be at least 8 characters.</p>
+      }
     <label for="new-desc">Description:</label>
-    <input id="new-desc" type="text" formControlName="newdesc">
+    <input id="new-desc" type="text" formControlName="newdesc" required>
+    @if (questForm.get('newdesc')?.hasError('minlength')) {
+        <p>Description must be at least 8 characters.</p>
+      }
     <label for="new-xp">XP:</label>
-    <input id="new-xp" type="number" formControlName="newxp">
-    <button (click)="addQuest()">Add New Quest</button>
+  
+    <input id="new-xp" type="number" formControlName="newxp" required>
+    <button (click)="addQuest()"  [disabled]="questForm.invalid">Add New Quest</button>
 </form>
 
 <ul>

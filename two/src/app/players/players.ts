@@ -3,7 +3,7 @@ import { RouterLink, RouterModule } from '@angular/router';
 import { PlayerInterface } from '../player-interface';
 import { PlayerService } from '../player-service';
 import { QuestService } from '../quest-service';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 
 @Component({
@@ -16,42 +16,69 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 export class Players {
   players: PlayerInterface[] = [];
   playerForm = new FormGroup({
-    newid: new FormControl(null),
-    newnickname: new FormControl(''),
+    newnickname: new FormControl('', [Validators.required, Validators.minLength(8)]),
   });
 
-    constructor(
-      private playerService: PlayerService,
-      private questService: QuestService
-    ) { }
+  constructor(
+    private playerService: PlayerService,
+    private questService: QuestService
+  ) { }
+
+  levels = [
+    { level: 1, xpRequired: 0, title: 'Novice' },
+    { level: 2, xpRequired: 100, title: 'Apprentice' },
+    { level: 3, xpRequired: 300, title: 'Adept' },
+    { level: 4, xpRequired: 600, title: 'Expert' },
+    { level: 5, xpRequired: 1000, title: 'Master' },
+    { level: 6, xpRequired: 2000, title: 'Grandmaster' },
+    { level: 7, xpRequired: 3500, title: 'Legend' },
+    { level: 8, xpRequired: 5500, title: 'Mythic' },
+    { level: 9, xpRequired: 8000, title: 'Immortal' },
+    { level: 10, xpRequired: 12000, title: 'Eternal' }
+  ];
+
+  getLevelData(xp: number) {
+    let currentLevel = this.levels[0];
+    for (const lvl of this.levels) {
+      if (xp >= lvl.xpRequired) currentLevel = lvl;
+      else break;
+    }
+    const nextLevel = this.levels.find(l => l.level === currentLevel.level + 1);
+    const progress = nextLevel
+      ? ((xp - currentLevel.xpRequired) / (nextLevel.xpRequired - currentLevel.xpRequired)) * 100
+      : 100;
+    return { currentLevel, nextLevel, progress: Math.round(progress) };
+  }
 
   ngOnInit() {
-      this.players = this.playerService.getPlayers();
-
-    }
-
-  onRemove(player: PlayerInterface) {
-      this.playerService.removePlayer(player);
-      this.players = this.playerService.getPlayers();
-    }
-
-    addPlayer() {
-      const formValues = this.playerForm.value;
-
-    const newId = formValues.newid!;
-    const name = formValues.newnickname!;
-    const newlvl = Math.floor(Math.random() * 10000);
-  
-      const defaultplayer: PlayerInterface = {
-        id: newId,
-        nickname: name,
-        level: newlvl,
-        clan: null,
-        quests: this.questService.getDefaultQuests()
-      };
-      this.playerService.addPlayer(defaultplayer);
-      this.players = this.playerService.getPlayers();
-    }
+    this.players = this.playerService.getPlayers();
 
   }
+
+  onRemove(player: PlayerInterface) {
+    this.playerService.removePlayer(player);
+    this.players = this.playerService.getPlayers();
+  }
+
+  addPlayer() {
+    if (this.playerForm.invalid) return;
+    const formValues = this.playerForm.value;
+
+    const newId = this.players.length + 1!;
+    const name = formValues.newnickname!;
+    const newxp = Math.floor(Math.random() * 10000);
+
+    const defaultplayer: PlayerInterface = {
+      id: newId,
+      nickname: name,
+      xp: newxp,
+      clan: null,
+      assignedQuests: this.questService.getDefaultQuests(),
+      completedQuests: []
+    };
+    this.playerService.addPlayer(defaultplayer);
+    this.players = this.playerService.getPlayers();
+  }
+
+}
 

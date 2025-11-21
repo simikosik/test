@@ -24,6 +24,15 @@ export class QuestService {
     constructor() {
     console.log('Service instance created.');
   }
+  addQuest(quest: QuestInterface) {
+    this.quests.push(quest);
+  }
+
+ 
+  removeQuest(id: number) {
+    this.quests = this.quests.filter(q => q.id !== id);
+  }
+
     getQuests(){
       return [...this.quests]};
    getQuestsbyId(id: number) {
@@ -33,13 +42,5 @@ export class QuestService {
   return this.getQuests().map(q => ({ ...q })); 
 
 }
- addQuest(quest: QuestInterface) {
-    this.quests.push(quest);
-  }
-
- 
-  removeQuest(id: number) {
-    this.quests = this.quests.filter(q => q.id !== id);
-  }
 }
 
