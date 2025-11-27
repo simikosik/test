@@ -1,15 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, signal, model,  computed } from '@angular/core';
 import { RouterLink, RouterModule } from '@angular/router';
 import { PlayerInterface } from '../player-interface';
 import { PlayerService } from '../player-service';
 import { QuestService } from '../quest-service';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 
 
 @Component({
   selector: 'app-players',
   standalone: true,
-  imports: [RouterLink, RouterModule, ReactiveFormsModule],
+  imports: [RouterLink, RouterModule, ReactiveFormsModule, FormsModule],
   templateUrl: './players.html',
   styleUrl: './players.css'
 })
@@ -18,6 +18,11 @@ export class Players {
   playerForm = new FormGroup({
     newnickname: new FormControl('', [Validators.required, Validators.minLength(8)]),
   });
+
+searchText = signal<string>('');
+selectedLevel = signal<string>('');
+
+
 
   constructor(
     private playerService: PlayerService,
@@ -49,6 +54,23 @@ export class Players {
       : 100;
     return { currentLevel, nextLevel, progress: Math.round(progress) };
   }
+
+  filteredPlayers = computed(() => {
+    const text = this.searchText().toLowerCase();
+    const lvl = this.selectedLevel();
+
+    return this.players.filter(p => {
+      const levelTitle = this.getLevelData(p.xp).currentLevel.title;
+
+      const matchesSearch =
+        p.nickname.toLowerCase().includes(text);
+
+      const matchesLevel =
+        !lvl || levelTitle === lvl;
+
+      return matchesSearch && matchesLevel;
+    });
+  });
 
   ngOnInit() {
     this.players = this.playerService.getPlayers();

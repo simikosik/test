@@ -1,15 +1,25 @@
 <ul>
+    <input type="text" placeholder="Search players..." [value]="searchText()"
+        (input)="searchText.set($event.target.value)">
+
+    <select [value]="selectedLevel()" (change)="selectedLevel.set($any($event.target).value)">
+        <option value="">All levels</option>
+        <option *ngFor="let lvl of levels" [value]="lvl.title">
+            {{ lvl.title }}
+        </option>
+    </select>
+
     <h1>Player list</h1>
-    <form [formGroup]="playerForm"> 
+    <form [formGroup]="playerForm">
         <label for="new-nickname">Nickname:</label>
         <input id="new-nickname" type="text" formControlName="newnickname">
         @if (playerForm.get('newnickname')?.hasError('minlength')) {
-            <p>Nickname must be at least 8 characters.</p>
-          }
-        <button (click)="addPlayer()"  [disabled]="playerForm.invalid">Add player</button>
+        <p>Nickname must be at least 8 characters.</p>
+        }
+        <button (click)="addPlayer()" [disabled]="playerForm.invalid">Add player</button>
     </form>
-    
-    @for (player of players; track player.id; ) {
+
+    @for (player of filteredPlayers(); track player.id; ) {
     <li>
 
 
@@ -25,9 +35,10 @@
         @else{
         <p style="color:green; font-weight: bold;">XP: {{player.xp}}</p>
         }
-        <p>Level: {{ getLevelData(player.xp).currentLevel.title }} ({{ getLevelData(player.xp).currentLevel.level }})</p>
+        <p>Level: {{ getLevelData(player.xp).currentLevel.title }} ({{ getLevelData(player.xp).currentLevel.level }})
+        </p>
         <p>{{ getLevelData(player.xp).progress }}% to next level</p>
-        XP: {{ player.xp }} 
+        XP: {{ player.xp }}
         <nav>
             <a [routerLink]="['/players', player.id]">detail</a>
         </nav><br>

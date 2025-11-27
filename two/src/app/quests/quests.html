@@ -1,4 +1,7 @@
-<p>quests works!</p>
+<input type="text" placeholder="Search quests..." [value]="searchText()"
+       (input)="searchText.set($event.target.value)">
+
+        
 <form [formGroup]="questForm">
     <label for="new-title">Title:</label>
     <input id="new-title" type="text"  formControlName="newtitle" required>
@@ -17,15 +20,10 @@
 </form>
 
 <ul>
-    @for (quest of quests; track quest.id; let i = $index) {
+  @for (quest of filteredQuests(); track quest.id; let i = $index) {
     <app-quest-item [quest]="quest" [index]="i" (deletequest)="removeQuest($event)"></app-quest-item>
-
-
-
-
-
-    }
-    @empty {
+  }
+  @empty {
     <li>Nahanaju ma bestie</li>
-    }
+  }
 </ul>

@@ -4,6 +4,8 @@ import { ClanService } from '../clan-service';
 import { PlayerService } from '../player-service';
 import { ClanInterface } from '../clan-interface';
 import { PlayerInterface } from '../player-interface';
+import { LevelInterface } from '../level-interface';
+
 
 
 @Component({

@@ -15,36 +15,39 @@ import { LevelsTs } from '../levels.ts/levels.ts';
 export class PlayerDetail {
   player: PlayerInterface | undefined;
   clanName: string | null = null;
-  private questService = inject(QuestService);
   availableQuests: QuestInterface[] = [];
 
+  private questService = inject(QuestService);
+
+ 
+  playerXp = signal(0);
+
+
+  levels = new LevelsTs().playerLevels;
+
+  
+  levelData = computed(() => {
+    const xp = this.playerXp();
+    let currentLevel = this.levels[0];
+
+    for (const lvl of this.levels) {
+      if (xp >= lvl.xpRequired) currentLevel = lvl;
+      else break;
+    }
+
+    const nextLevel = this.levels.find(l => l.level === currentLevel.level + 1);
+    const progress = nextLevel
+      ? ((xp - currentLevel.xpRequired) / (nextLevel.xpRequired - currentLevel.xpRequired)) * 100
+      : 100;
+
+    return { currentLevel, nextLevel, progress: Math.round(progress) };
+  });
 
   constructor(
     private route: ActivatedRoute,
     private playerService: PlayerService,
     private clanService: ClanService
   ) {}
-
-  playerXp = signal(0); 
-
-levels = new LevelsTs().playerLevels;
-
-levelData = computed(() => {
-  const xp = this.playerXp();
-  let currentLevel = this.levels[0];
-
-  for (let lvl of this.levels) {
-    if (xp >= lvl.xpRequired) currentLevel = lvl;
-    else break;
-  }
-
-  const nextLevel = this.levels.find(l => l.level === currentLevel.level + 1);
-  const progress = nextLevel
-    ? ((xp - currentLevel.xpRequired) / (nextLevel.xpRequired - currentLevel.xpRequired)) * 100
-    : 100;
-
-  return { currentLevel, nextLevel, progress: Math.round(progress) };
-});
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -55,15 +58,17 @@ levelData = computed(() => {
       this.player.assignedQuests ??= [];
       this.player.completedQuests ??= [];
 
+  
+      this.playerXp.set(this.player.xp ?? 0);
+
+    
       this.updateAvailableQuests();
     }
 
     if (this.player?.clan) {
       const clan = this.clanService.getClanById(this.player.clan);
-      this.clanName = clan ? clan.name : null;
+      this.clanName = clan?.name ?? null;
     }
-
-    this.playerXp.set(this.player?.xp ?? 0);
   }
 
   completeQuest(q: QuestInterface) {
@@ -72,6 +77,7 @@ levelData = computed(() => {
     this.player.assignedQuests = this.player.assignedQuests.filter(x => x.id !== q.id);
     this.player.completedQuests.push(q);
 
+   
     this.player.xp += q.xp;
     this.playerXp.set(this.player.xp);
 
@@ -84,6 +90,7 @@ levelData = computed(() => {
     this.player.completedQuests = this.player.completedQuests.filter(x => x.id !== q.id);
     this.player.assignedQuests.push(q);
 
+    
     this.player.xp -= q.xp;
     this.playerXp.set(this.player.xp);
 

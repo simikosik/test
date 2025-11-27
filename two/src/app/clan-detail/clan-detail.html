@@ -8,7 +8,7 @@
     @for (player of clan.members; track player.id) {
       <li>
         <a [routerLink]="['/players', player.id]">
-          {{ player.nickname }} (Lv. {{ player.level }})
+          {{ player.nickname }} 
         </a>
         <button (click)="removePlayerFromClan(player)">Remove</button>
       </li>

@@ -1,23 +1,25 @@
+ <input type="text" placeholder="Search clans..." [value]="searchText()"
+        (input)="searchText.set($event.target.value)">
 <h1>Clans</h1>
 <form [formGroup]="clanForm">
     <label for="new-name">Name:</label>
     <input id="new-name" type="text" formControlName="newname" required />
     @if (clanForm.get('newname')?.hasError('minlength')) {
-        <p>Name must be at least 8 characters.</p>
-      }
+    <p>Name must be at least 8 characters.</p>
+    }
     <label for="new-desc">Description:</label>
     <input id="new-desc" type="text" formControlName="newdesc" required />
     @if (clanForm.get('newdesc')?.hasError('minlength')) {
-        <p>Description must be at least 8 characters.</p>
-      }
+    <p>Description must be at least 8 characters.</p>
+    }
     <label for="new-cap">Capacity:</label>
     <input id="new-cap" type="number" formControlName="newcapacity" required />
-    <button (click)="addClan()"  [disabled]="clanForm.invalid">Add Clan</button>
+    <button (click)="addClan()" [disabled]="clanForm.invalid">Add Clan</button>
 </form>
 
 
 <ul>
-    @for (clan of clans; track clan.id) {
+    @for (clan of filteredClans(); track clan.id) {
     <li>
         <h3>{{ clan.name }}</h3>
         <p>{{ clan.description }}</p>
