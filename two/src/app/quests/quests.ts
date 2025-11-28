@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit, signal, computed} from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal, computed, model} from '@angular/core';
 import { QuestInterface } from '../quest-interface';
 import { QuestItem } from '../quest-item/quest-item';
 import { QuestService } from '../quest-service';
@@ -19,7 +19,7 @@ export class Quests implements OnInit, OnDestroy {
     newxp: new FormControl(null, [ Validators.required, Validators.minLength(1)]),
   });
 
-searchText = signal<string>('');
+searchText = model<string>('');
 
   addQuest() {
     if (this.questForm.invalid) return;

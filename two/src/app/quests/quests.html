@@ -1,7 +1,7 @@
 <input type="text" placeholder="Search quests..." [value]="searchText()"
        (input)="searchText.set($event.target.value)">
 
-        
+       <h1>Quest list</h1>  
 <form [formGroup]="questForm">
     <label for="new-title">Title:</label>
     <input id="new-title" type="text"  formControlName="newtitle" required>

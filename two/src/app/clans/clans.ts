@@ -1,4 +1,4 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, model} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ClanService } from '../clan-service';
 import { ClanInterface } from '../clan-interface';
@@ -18,7 +18,7 @@ export class Clans {
     newcapacity: new FormControl(null, [ Validators.required, Validators.minLength(8)]),
   });
 
-  searchText = signal<string>('');
+  searchText = model<string>('');
 
   constructor(private clanService: ClanService) {}
 

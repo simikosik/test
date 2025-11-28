@@ -2,9 +2,10 @@
     <input type="text" placeholder="Search players..." [value]="searchText()"
         (input)="searchText.set($event.target.value)">
 
-    <select [value]="selectedLevel()" (change)="selectedLevel.set($any($event.target).value)">
+    <select [ngModel]="selectedLevel()" (ngModelChange)="selectedLevel.set($event)">
+
         <option value="">All levels</option>
-        <option *ngFor="let lvl of levels" [value]="lvl.title">
+        <option *ngFor="let lvl of levels" [ngValue]="lvl.title">
             {{ lvl.title }}
         </option>
     </select>

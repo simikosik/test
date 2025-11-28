@@ -1,6 +1,7 @@
-import { Component, signal, model,  computed } from '@angular/core';
+import { Component, signal, model,  computed, } from '@angular/core';
 import { RouterLink, RouterModule } from '@angular/router';
 import { PlayerInterface } from '../player-interface';
+import { CommonModule } from '@angular/common';
 import { PlayerService } from '../player-service';
 import { QuestService } from '../quest-service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
@@ -9,7 +10,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule } 
 @Component({
   selector: 'app-players',
   standalone: true,
-  imports: [RouterLink, RouterModule, ReactiveFormsModule, FormsModule],
+  imports: [RouterLink, RouterModule, ReactiveFormsModule, FormsModule,  CommonModule, ],
   templateUrl: './players.html',
   styleUrl: './players.css'
 })
@@ -19,8 +20,8 @@ export class Players {
     newnickname: new FormControl('', [Validators.required, Validators.minLength(8)]),
   });
 
-searchText = signal<string>('');
-selectedLevel = signal<string>('');
+searchText = model<string>('');
+selectedLevel = model<string>('');
 
 
 
