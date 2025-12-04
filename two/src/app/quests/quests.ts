@@ -2,10 +2,11 @@ import { Component, inject, OnDestroy, OnInit, signal, computed, model} from '@a
 import { QuestInterface } from '../quest-interface';
 import { QuestItem } from '../quest-item/quest-item';
 import { QuestService } from '../quest-service';
-import { FormControl, FormGroup, ReactiveFormsModule, Validator, Validators } from '@angular/forms';
+import { FormData } from '../form-data';
+import { FormControl, FormGroup, ReactiveFormsModule, Validator, Validators, Field,  } from '@angular/forms';
 @Component({
   selector: 'app-quests',
-  imports: [QuestItem, ReactiveFormsModule],
+  imports: [QuestItem, ReactiveFormsModule, Field, ],
   templateUrl: './quests.html',
   styleUrl: './quests.css',
   standalone: true
@@ -13,11 +14,21 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validator, Validators } fr
 export class Quests implements OnInit, OnDestroy {
   questService = inject(QuestService);
  quests = signal<QuestInterface[]>(this.questService.getQuests());
-  questForm = new FormGroup({
+  /*questForm = new FormGroup({
     newtitle: new FormControl('', [ Validators.required, Validators.minLength(8)]),
     newdesc: new FormControl('', [ Validators.required, Validators.minLength(8)]),
     newxp: new FormControl(null, [ Validators.required, Validators.minLength(1)]),
-  });
+  });*/
+  questModel = signal<FormData>({
+  title: '',
+  desc: '',
+  xp: 0,
+
+  })
+
+  questForm = form(this.questModel);
+
+ 
 
 searchText = model<string>('');
 
