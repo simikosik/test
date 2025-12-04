@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import { CommonModule } from '@angular/common';
+
 import { QuestInterface } from '../quest-interface';
 import { QuestItem } from '../quest-item/quest-item';
 import { QuestService } from '../quest-service';
@@ -8,7 +8,7 @@ import { QuestService } from '../quest-service';
 @Component({
   selector: 'app-quest-detail',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './quest-detail.html',
   styleUrl: './quest-detail.css'
 })

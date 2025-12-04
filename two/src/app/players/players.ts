@@ -1,7 +1,7 @@
 import { Component, signal, model,  computed, } from '@angular/core';
 import { RouterLink, RouterModule } from '@angular/router';
 import { PlayerInterface } from '../player-interface';
-import { CommonModule } from '@angular/common';
+
 import { PlayerService } from '../player-service';
 import { QuestService } from '../quest-service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
@@ -10,7 +10,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule } 
 @Component({
   selector: 'app-players',
   standalone: true,
-  imports: [RouterLink, RouterModule, ReactiveFormsModule, FormsModule,  CommonModule, ],
+  imports: [RouterLink, RouterModule, ReactiveFormsModule, FormsModule],
   templateUrl: './players.html',
   styleUrl: './players.css'
 })

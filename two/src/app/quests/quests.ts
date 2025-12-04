@@ -3,10 +3,12 @@ import { QuestInterface } from '../quest-interface';
 import { QuestItem } from '../quest-item/quest-item';
 import { QuestService } from '../quest-service';
 import { FormData } from '../form-data';
-import { FormControl, FormGroup, ReactiveFormsModule, Validator, Validators, Field,  } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validator, Validators } from '@angular/forms';
+import { form, Field } from '@angular/forms/signals';
 @Component({
   selector: 'app-quests',
-  imports: [QuestItem, ReactiveFormsModule, Field, ],
+
+  imports: [QuestItem, ReactiveFormsModule, Field],
   templateUrl: './quests.html',
   styleUrl: './quests.css',
   standalone: true
@@ -23,6 +25,7 @@ export class Quests implements OnInit, OnDestroy {
   title: '',
   desc: '',
   xp: 0,
+  capacity: 0,
 
   })
 
@@ -33,16 +36,18 @@ export class Quests implements OnInit, OnDestroy {
 searchText = model<string>('');
 
   addQuest() {
-    if (this.questForm.invalid) return;
-    const formValues = this.questForm.value;
-   var newId = this.quests().length + 1;
-   var newTitle = formValues.newtitle!;
-    var newDesc = formValues.newdesc!;
-    const newXp = Number(formValues.newxp);
 
+  //const formValues = this.questForm().value();
+    if (this.questForm().invalid()) return;
+   var newId = this.quests().length + 1;
+   var newTitle = this.questForm().value().title!;
+    var newDesc = this.questForm().value().desc!;
+   var newXp = this.questForm().value().xp!;
+    
     const newquest: QuestInterface = {
       id: newId, title: newTitle, description: newDesc, xp: newXp,
     }
+    console.log('eh questnewig.')
     this.questService.addQuest(newquest);
 this.quests.set(this.questService.getQuests());
 

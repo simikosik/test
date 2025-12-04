@@ -2,21 +2,17 @@
        (input)="searchText.set($event.target.value)">
 
        <h1>Quest list</h1>  
-<form [formGroup]="questForm">
-    <label for="new-title">Title:</label>
-    <input id="new-title" type="text"  formControlName="newtitle" required>
-    @if (questForm.get('newtitle')?.hasError('minlength')) {
-        <p>Title must be at least 8 characters.</p>
-      }
-    <label for="new-desc">Description:</label>
-    <input id="new-desc" type="text" formControlName="newdesc" required>
-    @if (questForm.get('newdesc')?.hasError('minlength')) {
-        <p>Description must be at least 8 characters.</p>
-      }
-    <label for="new-xp">XP:</label>
+<form>
+    <label>Title:</label>
+    <input [field]="questForm.title">
   
-    <input id="new-xp" type="number" formControlName="newxp" required>
-    <button (click)="addQuest()"  [disabled]="questForm.invalid">Add New Quest</button>
+    <label>Description:</label>
+    <input [field]="questForm.desc">
+ 
+    <label>XP:</label>
+  
+    <input  type="number" [field]="questForm.xp">
+    <button (click)="addQuest()"  [disabled]="questForm().invalid()">Add New Quest</button>
 </form>
 
 <ul>
