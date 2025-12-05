@@ -1,25 +1,24 @@
-<input type="text" placeholder="Search quests..." [value]="searchText()"
-       (input)="searchText.set($event.target.value)">
+<input type="text" placeholder="Search quests..." [value]="searchText()" (input)="searchText.set($event.target.value)">
 
-       <h1>Quest list</h1>  
+<h1>Quest list</h1>
 <form>
-    <label>Title:</label>
-    <input [field]="questForm.title">
-  
-    <label>Description:</label>
-    <input [field]="questForm.desc">
- 
-    <label>XP:</label>
-  
-    <input  type="number" [field]="questForm.xp">
-    <button (click)="addQuest()"  [disabled]="questForm().invalid()">Add New Quest</button>
+  <label>Title:</label>
+  <input [field]="questForm.title">
+
+  <label>Description:</label>
+  <input [field]="questForm.desc">
+
+  <label>XP:</label>
+
+  <input type="number" [field]="questForm.xp">
+  <button type="button" (click)="addQuest()" [disabled]="questForm().invalid()">Add Quests</button>
 </form>
 
 <ul>
   @for (quest of filteredQuests(); track quest.id; let i = $index) {
-    <app-quest-item [quest]="quest" [index]="i" (deletequest)="removeQuest($event)"></app-quest-item>
+  <app-quest-item [quest]="quest" [index]="i" (deletequest)="removeQuest($event)"></app-quest-item>
   }
   @empty {
-    <li>Nahanaju ma bestie</li>
+  <li>Nahanaju ma bestie</li>
   }
 </ul>

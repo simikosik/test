@@ -13,13 +13,11 @@
     </select>
 
     <h1>Player list</h1>
-    <form [formGroup]="playerForm">
-      <label for="new-nickname">Nickname:</label>
-      <input id="new-nickname" type="text" formControlName="newnickname">
-      @if (playerForm.get('newnickname')?.hasError('minlength')) {
-        <p>Nickname must be at least 8 characters.</p>
-      }
-      <button (click)="addPlayer()" [disabled]="playerForm.invalid">Add player</button>
+    <form >
+      <label >Nickname:</label>
+      <input [field]="playerForm.nickname">
+
+      <button type="button" (click)="addPlayer()" [disabled]="playerForm().invalid()">Add player</button>
     </form>
 
     @for (player of filteredPlayers(); track player.id; ) {

@@ -1,10 +1,10 @@
-import { Component, inject, OnDestroy, OnInit, signal, computed, model} from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal, computed, model } from '@angular/core';
 import { QuestInterface } from '../quest-interface';
 import { QuestItem } from '../quest-item/quest-item';
 import { QuestService } from '../quest-service';
 import { FormData } from '../form-data';
 import { FormControl, FormGroup, ReactiveFormsModule, Validator, Validators } from '@angular/forms';
-import { form, Field } from '@angular/forms/signals';
+import { form, Field, minLength, required } from '@angular/forms/signals';
 @Component({
   selector: 'app-quests',
 
@@ -15,55 +15,61 @@ import { form, Field } from '@angular/forms/signals';
 })
 export class Quests implements OnInit, OnDestroy {
   questService = inject(QuestService);
- quests = signal<QuestInterface[]>(this.questService.getQuests());
+  quests = signal<QuestInterface[]>(this.questService.getQuests());
   /*questForm = new FormGroup({
     newtitle: new FormControl('', [ Validators.required, Validators.minLength(8)]),
     newdesc: new FormControl('', [ Validators.required, Validators.minLength(8)]),
     newxp: new FormControl(null, [ Validators.required, Validators.minLength(1)]),
   });*/
   questModel = signal<FormData>({
-  title: '',
-  desc: '',
-  xp: 0,
-  capacity: 0,
+    title: '',
+    desc: '',
+    xp: 0,
+    capacity: 0,
+    nickname: '',
 
   })
 
-  questForm = form(this.questModel);
+  questForm = form(this.questModel, (fieldPath) => {
+    required(fieldPath.title);
+    required(fieldPath.desc);
+    required(fieldPath.xp);
 
- 
+  });
 
-searchText = model<string>('');
+
+
+  searchText = model<string>('');
 
   addQuest() {
 
-  //const formValues = this.questForm().value();
+    //const formValues = this.questForm().value();
     if (this.questForm().invalid()) return;
-   var newId = this.quests().length + 1;
-   var newTitle = this.questForm().value().title!;
+    var newId = this.quests().length + 1;
+    var newTitle = this.questForm().value().title!;
     var newDesc = this.questForm().value().desc!;
-   var newXp = this.questForm().value().xp!;
-    
+    var newXp = this.questForm().value().xp!;
+
     const newquest: QuestInterface = {
       id: newId, title: newTitle, description: newDesc, xp: newXp,
     }
     console.log('eh questnewig.')
     this.questService.addQuest(newquest);
-this.quests.set(this.questService.getQuests());
+    this.quests.set(this.questService.getQuests());
 
   }
   removeQuest(id: number) {
-     this.questService.removeQuest(id);
- this.quests.set(this.questService.getQuests());
+    this.questService.removeQuest(id);
+    this.quests.set(this.questService.getQuests());
   }
-  
-filteredQuests = computed(() => {
-  const text = this.searchText().toLowerCase();
 
-  return this.quests().filter((quest: QuestInterface) =>
-    quest.title.toLowerCase().includes(text)
-  );
-});
+  filteredQuests = computed(() => {
+    const text = this.searchText().toLowerCase();
+
+    return this.quests().filter((quest: QuestInterface) =>
+      quest.title.toLowerCase().includes(text)
+    );
+  });
 
 
   ngOnInit() {

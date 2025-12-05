@@ -1,27 +1,43 @@
-import { Component, signal, model,  computed, } from '@angular/core';
+import { Component, signal, model, computed, } from '@angular/core';
 import { RouterLink, RouterModule } from '@angular/router';
 import { PlayerInterface } from '../player-interface';
-
+import { FormData } from '../form-data';
 import { PlayerService } from '../player-service';
 import { QuestService } from '../quest-service';
+
 import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
+import { form, Field, required } from '@angular/forms/signals';
 
 
 @Component({
   selector: 'app-players',
   standalone: true,
-  imports: [RouterLink, RouterModule, ReactiveFormsModule, FormsModule],
+  imports: [RouterLink, RouterModule, ReactiveFormsModule, FormsModule, Field],
   templateUrl: './players.html',
   styleUrl: './players.css'
 })
 export class Players {
-  players: PlayerInterface[] = [];
+  /*
   playerForm = new FormGroup({
     newnickname: new FormControl('', [Validators.required, Validators.minLength(8)]),
+  });*/
+  players = signal<PlayerInterface[]>([]);
+  playerModel = signal<FormData>({
+    title: '',
+    desc: '',
+    xp: 0,
+    capacity: 0,
+    nickname: '',
+
+  })
+
+  playerForm = form(this.playerModel, (fieldPath) => {
+    required(fieldPath.nickname);
+
   });
 
-searchText = model<string>('');
-selectedLevel = model<string>('');
+  searchText = model<string>('');
+  selectedLevel = model<string>('');
 
 
 
@@ -60,7 +76,7 @@ selectedLevel = model<string>('');
     const text = this.searchText().toLowerCase();
     const lvl = this.selectedLevel();
 
-    return this.players.filter(p => {
+    return this.players().filter(p => {
       const levelTitle = this.getLevelData(p.xp).currentLevel.title;
 
       const matchesSearch =
@@ -73,22 +89,18 @@ selectedLevel = model<string>('');
     });
   });
 
-  ngOnInit() {
-    this.players = this.playerService.getPlayers();
-
-  }
-
   onRemove(player: PlayerInterface) {
     this.playerService.removePlayer(player);
-    this.players = this.playerService.getPlayers();
+    this.players.set([...this.playerService.getPlayers()]);
   }
 
-  addPlayer() {
-    if (this.playerForm.invalid) return;
-    const formValues = this.playerForm.value;
 
-    const newId = this.players.length + 1!;
-    const name = formValues.newnickname!;
+  addPlayer() {
+    if (this.playerForm().invalid()) return;
+    // const formValues = this.playerForm().value();
+
+    const newId = this.players().length + 1!;
+    const name = this.playerForm().value().nickname!;
     const newxp = Math.floor(Math.random() * 10000);
 
     const defaultplayer: PlayerInterface = {
@@ -96,11 +108,19 @@ selectedLevel = model<string>('');
       nickname: name,
       xp: newxp,
       clan: null,
-      assignedQuests: this.questService.getDefaultQuests(),
+      //assignedQuests: this.questService.getDefaultQuests(),
+      assignedQuests: [],
       completedQuests: []
     };
+    console.log('eh playernewig.')
     this.playerService.addPlayer(defaultplayer);
-    this.players = this.playerService.getPlayers();
+    this.players.set([...this.playerService.getPlayers()]);
+  }
+
+
+  ngOnInit() {
+    this.players.set([...this.playerService.getPlayers()]);
+
   }
 
 }

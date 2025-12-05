@@ -1,20 +1,14 @@
  <input type="text" placeholder="Search clans..." [value]="searchText()"
         (input)="searchText.set($event.target.value)">
 <h1>Clans</h1>
-<form [formGroup]="clanForm">
-    <label for="new-name">Name:</label>
-    <input id="new-name" type="text" formControlName="newname" required />
-    @if (clanForm.get('newname')?.hasError('minlength')) {
-    <p>Name must be at least 8 characters.</p>
-    }
-    <label for="new-desc">Description:</label>
-    <input id="new-desc" type="text" formControlName="newdesc" required />
-    @if (clanForm.get('newdesc')?.hasError('minlength')) {
-    <p>Description must be at least 8 characters.</p>
-    }
-    <label for="new-cap">Capacity:</label>
-    <input id="new-cap" type="number" formControlName="newcapacity" required />
-    <button (click)="addClan()" [disabled]="clanForm.invalid">Add Clan</button>
+<form>
+    <label>Name:</label>
+    <input [field]="clanForm.title"/>
+    <label>Description:</label>
+    <input  [field]="clanForm.desc"/>
+    <label>Capacity:</label>
+    <input type="number"  [field]="clanForm.capacity" />
+    <button type="button" (click)="addClan()" [disabled]="clanForm().invalid()">Add Clan</button>
 </form>
 
 
