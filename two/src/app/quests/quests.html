@@ -14,11 +14,20 @@
   <button type="button" (click)="addQuest()" [disabled]="questForm().invalid()">Add Quests</button>
 </form>
 
-<ul>
-  @for (quest of filteredQuests(); track quest.id; let i = $index) {
-  <app-quest-item [quest]="quest" [index]="i" (deletequest)="removeQuest($event)"></app-quest-item>
+<ul>  
+@if (filteredQuests$ | async; as quests) {
+u
+    @if (quests.length > 0) {
+      @for (quest of quests; track quest.docId) {
+        <app-quest-item>
+          [quest]="quest"
+          (deletequest)="removeQuest(quest.docId)">
+        </app-quest-item>
+      }
+    } @else {
+      <li>Nahanaju ma bestie</li>
+    }
+
   }
-  @empty {
-  <li>Nahanaju ma bestie</li>
-  }
+
 </ul>

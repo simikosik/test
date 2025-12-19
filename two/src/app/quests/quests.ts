@@ -5,17 +5,21 @@ import { QuestService } from '../quest-service';
 import { FormData } from '../form-data';
 import { FormControl, FormGroup, ReactiveFormsModule, Validator, Validators } from '@angular/forms';
 import { form, Field, minLength, required } from '@angular/forms/signals';
+import { map, combineLatest } from 'rxjs';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { async } from 'rxjs';
 @Component({
   selector: 'app-quests',
 
-  imports: [QuestItem, ReactiveFormsModule, Field],
+  imports: [QuestItem, ReactiveFormsModule, Field,],
   templateUrl: './quests.html',
   styleUrl: './quests.css',
   standalone: true
 })
 export class Quests implements OnInit, OnDestroy {
-  questService = inject(QuestService);
-  quests = signal<QuestInterface[]>(this.questService.getQuests());
+  private questService = inject(QuestService);
+  quests$ = this.questService.getQuests();
+
   /*questForm = new FormGroup({
     newtitle: new FormControl('', [ Validators.required, Validators.minLength(8)]),
     newdesc: new FormControl('', [ Validators.required, Validators.minLength(8)]),
@@ -40,36 +44,34 @@ export class Quests implements OnInit, OnDestroy {
 
 
   searchText = model<string>('');
+  private searchText$ = toObservable(this.searchText);
 
   addQuest() {
 
     //const formValues = this.questForm().value();
-    if (this.questForm().invalid()) return;
-    var newId = this.quests().length + 1;
-    var newTitle = this.questForm().value().title!;
-    var newDesc = this.questForm().value().desc!;
-    var newXp = this.questForm().value().xp!;
+     if (this.questForm().invalid()) return;
+
+    const value = this.questForm().value();
 
     const newquest: QuestInterface = {
-      id: newId, title: newTitle, description: newDesc, xp: newXp,
+      id: Date.now(), title: value.title!, description: value.desc!, xp: value.xp!,
     }
     console.log('eh questnewig.')
     this.questService.addQuest(newquest);
-    this.quests.set(this.questService.getQuests());
-
-  }
-  removeQuest(id: number) {
-    this.questService.removeQuest(id);
-    this.quests.set(this.questService.getQuests());
+    this.questForm().reset();
   }
 
-  filteredQuests = computed(() => {
-    const text = this.searchText().toLowerCase();
+ removeQuest(docId: string) {
+  this.questService.removeQuest(docId);
+}
 
-    return this.quests().filter((quest: QuestInterface) =>
-      quest.title.toLowerCase().includes(text)
-    );
-  });
+  filteredQuests$ = combineLatest([this.quests$, this.searchText$]).pipe(
+    map(([quests, text]) =>
+      quests.filter(q =>
+        q.title.toLowerCase().includes(text.toLowerCase())
+      )
+    )
+  ); 
 
 
   ngOnInit() {

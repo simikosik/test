@@ -1,46 +1,32 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
+import { Firestore, collection, collectionData, addDoc, deleteDoc, doc } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 import { QuestInterface } from './quest-interface';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class QuestService {
-
-  private quest1: QuestInterface = {
-      id: 1, title: "Rano vstanem", description: "Najdi zmysel zivota", xp: 10
-  
-    }
-    private quest2: QuestInterface = {
-      id: 2, title: "mikne ma", description: "Vyjeb sa na to", xp: 100
-  
-    }
-    private quest3: QuestInterface = {
-      id: 3, title: "pozriem sa zlava do prava", description: "Choj Spat", xp: 1000
-  
-    }
-    private quests = [this.quest1, this.quest2, this.quest3];
-    
-    
-    constructor() {
-    console.log('Service instance created.');
-  }
-  addQuest(quest: QuestInterface) {
-    this.quests.push(quest);
-  }
+  private firestore = inject(Firestore);
+  private questsRef = collection(this.firestore, 'quests');
 
  
-  removeQuest(id: number) {
-    this.quests = this.quests.filter(q => q.id !== id);
+  questsSignal = signal<QuestInterface[]>([]);
+
+  constructor() {
+    
+    collectionData(this.questsRef, { idField: 'docId' }).subscribe(qs => {
+      this.questsSignal.set(qs as QuestInterface[]);
+    });
   }
 
-    getQuests(){
-      return [...this.quests]};
-   getQuestsbyId(id: number) {
-    return this.quests.find(q => q.id === id);
-   }
-   getDefaultQuests(): QuestInterface[] {
-  return this.getQuests().map(q => ({ ...q })); 
+  getQuests(): Observable<QuestInterface[]> {
+    return collectionData(this.questsRef, { idField: 'docId' }) as Observable<QuestInterface[]>;
+  }
 
-}
-}
+  addQuest(quest: QuestInterface) {
+    return addDoc(this.questsRef, quest);
+  }
 
+  removeQuest(docId: string) {
+    return deleteDoc(doc(this.firestore, 'quests', docId));
+  }
+}

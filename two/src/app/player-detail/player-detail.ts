@@ -13,19 +13,16 @@ import { LevelsTs } from '../levels.ts/levels.ts';
   templateUrl: './player-detail.html'
 })
 export class PlayerDetail {
-  player: PlayerInterface | undefined;
-  clanName: string | null = null;
-  availableQuests: QuestInterface[] = [];
+  player = signal<PlayerInterface | null>(null);
+  clanName = signal<string | null>(null);
 
-  private questService = inject(QuestService);
-
- 
+  // Signal for player XP
   playerXp = signal(0);
 
-
+  // Levels data
   levels = new LevelsTs().playerLevels;
 
-  
+  // Computed level info
   levelData = computed(() => {
     const xp = this.playerXp();
     let currentLevel = this.levels[0];
@@ -43,6 +40,19 @@ export class PlayerDetail {
     return { currentLevel, nextLevel, progress: Math.round(progress) };
   });
 
+  // Available quests as a computed signal
+  availableQuests = computed(() => {
+    const playerData = this.player();
+    if (!playerData) return [];
+
+    return this.questService.questsSignal().filter(q =>
+      !playerData.assignedQuests?.some(aq => aq.id === q.id) &&
+      !playerData.completedQuests?.some(cq => cq.id === q.id)
+    );
+  });
+
+  private questService = inject(QuestService);
+
   constructor(
     private route: ActivatedRoute,
     private playerService: PlayerService,
@@ -51,68 +61,56 @@ export class PlayerDetail {
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.player = this.playerService.getPlayersbyId(id);
+    const playerData = this.playerService.getPlayersbyId(id);
 
-    if (this.player) {
-    
-      this.player.assignedQuests ??= [];
-      this.player.completedQuests ??= [];
+    if (!playerData) return;
 
-  
-      this.playerXp.set(this.player.xp ?? 0);
+    // Initialize assigned and completed quests
+    playerData.assignedQuests ??= [];
+    playerData.completedQuests ??= [];
 
-    
-      this.updateAvailableQuests();
-    }
+    this.player.set(playerData);
+    this.playerXp.set(playerData.xp ?? 0);
 
-    if (this.player?.clan) {
-      const clan = this.clanService.getClanById(this.player.clan);
-      this.clanName = clan?.name ?? null;
+    if (playerData.clan) {
+      const clan = this.clanService.getClanById(playerData.clan);
+      this.clanName.set(clan?.name ?? null);
     }
   }
 
   completeQuest(q: QuestInterface) {
-    if (!this.player) return;
+    const playerData = this.player();
+    if (!playerData) return;
 
-    this.player.assignedQuests = this.player.assignedQuests.filter(x => x.id !== q.id);
-    this.player.completedQuests.push(q);
+    playerData.assignedQuests = playerData.assignedQuests.filter(aq => aq.id !== q.id);
+    playerData.completedQuests.push(q);
 
-   
-    this.player.xp += q.xp;
-    this.playerXp.set(this.player.xp);
+    playerData.xp += q.xp;
+    this.playerXp.set(playerData.xp);
 
-    this.updateAvailableQuests();
+    this.player.set({ ...playerData }); // trigger reactivity
   }
 
   undoQuest(q: QuestInterface) {
-    if (!this.player) return;
+    const playerData = this.player();
+    if (!playerData) return;
 
-    this.player.completedQuests = this.player.completedQuests.filter(x => x.id !== q.id);
-    this.player.assignedQuests.push(q);
+    playerData.completedQuests = playerData.completedQuests.filter(cq => cq.id !== q.id);
+    playerData.assignedQuests.push(q);
 
-    
-    this.player.xp -= q.xp;
-    this.playerXp.set(this.player.xp);
+    playerData.xp -= q.xp;
+    this.playerXp.set(playerData.xp);
 
-    this.updateAvailableQuests();
+    this.player.set({ ...playerData });
   }
 
   assignQuest(q: QuestInterface) {
-    if (!this.player) return;
+    const playerData = this.player();
+    if (!playerData) return;
 
-    this.player.assignedQuests.push(q);
+    playerData.assignedQuests.push(q);
 
- 
-    this.availableQuests = this.availableQuests.filter(aq => aq.id !== q.id);
-  }
-
-  updateAvailableQuests() {
-    if (!this.player) return;
-
-    const allQuests = this.questService.getQuests();
-    this.availableQuests = allQuests.filter(q =>
-      !this.player!.assignedQuests.some(aq => aq.id === q.id) &&
-      !this.player!.completedQuests.some(cq => cq.id === q.id)
-    );
+    this.player.set({ ...playerData });
+    
   }
 }
