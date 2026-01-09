@@ -7,11 +7,12 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validator, Validators } fr
 import { form, Field, minLength, required } from '@angular/forms/signals';
 import { map, combineLatest } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
+import { AsyncPipe } from '@angular/common';
 import { async } from 'rxjs';
 @Component({
   selector: 'app-quests',
 
-  imports: [QuestItem, ReactiveFormsModule, Field,],
+  imports: [QuestItem, ReactiveFormsModule, Field, AsyncPipe],
   templateUrl: './quests.html',
   styleUrl: './quests.css',
   standalone: true

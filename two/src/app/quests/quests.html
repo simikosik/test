@@ -1,6 +1,7 @@
 <input type="text" placeholder="Search quests..." [value]="searchText()" (input)="searchText.set($event.target.value)">
 
 <h1>Quest list</h1>
+
 <form>
   <label>Title:</label>
   <input [field]="questForm.title">
@@ -9,25 +10,21 @@
   <input [field]="questForm.desc">
 
   <label>XP:</label>
-
   <input type="number" [field]="questForm.xp">
-  <button type="button" (click)="addQuest()" [disabled]="questForm().invalid()">Add Quests</button>
+
+  <button type="button" (click)="addQuest()" [disabled]="questForm().invalid()">
+    Add Quest
+  </button>
 </form>
 
-<ul>  
-@if (filteredQuests$ | async; as quests) {
-u
-    @if (quests.length > 0) {
-      @for (quest of quests; track quest.docId) {
-        <app-quest-item>
-          [quest]="quest"
-          (deletequest)="removeQuest(quest.docId)">
-        </app-quest-item>
-      }
-    } @else {
-      <li>Nahanaju ma bestie</li>
-    }
-
+<ul>
+  @for (quest of filteredQuests$ | async; track quest.docId; let i = $index) {
+    <app-quest-item
+      [quest]="quest"
+      [index]="i"
+      (deletequest)="removeQuest(quest.docId!)">
+    </app-quest-item>
+  } @empty {
+    <li>No quests found</li>
   }
-
 </ul>

@@ -1,21 +1,18 @@
-import { Component, inject } from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-
-import { QuestInterface } from '../quest-interface';
-import { QuestItem } from '../quest-item/quest-item';
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { map } from 'rxjs';
 import { QuestService } from '../quest-service';
+import { QuestInterface } from '../quest-interface';
 
 @Component({
   selector: 'app-quest-detail',
   standalone: true,
-  imports: [],
   templateUrl: './quest-detail.html',
   styleUrl: './quest-detail.css'
 })
 export class QuestDetail {
-  quest: any;
-  
- 
+  quest$!: any;
+
   constructor(
     private route: ActivatedRoute,
     private questService: QuestService
@@ -23,9 +20,11 @@ export class QuestDetail {
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.quest = this.questService.getQuestsbyId(id);
+
+    this.quest$ = this.questService.getQuests().pipe(
+      map((quests: QuestInterface[]) =>
+        quests.find(q => q.id === id)
+      )
+    );
   }
 }
-    
-  
-

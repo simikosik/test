@@ -1,51 +1,60 @@
-@if (player) {
-<h2>{{ player.id }} {{player.nickname}}</h2>
-<p><strong>Clan:</strong> {{ clanName ?? 'No clan' }}</p>
-<p><strong>Level:</strong> {{ levelData().currentLevel.title }} ({{ levelData().currentLevel.level }})</p>
-<p>{{ levelData().progress }}% to next level</p>
-  
-<h4>Quests:</h4>
-<ul>
-  @if (player.assignedQuests.length > 0) {
-  <ul>
-    @for (quest of player.assignedQuests; track quest.id) {
-    <li>
-      <strong>{{ quest.title }}</strong> – {{ quest.description }} ({{ quest.xp }} XP)
+@if (player()) {
 
-      <button (click)="completeQuest(quest)">Complete</button>
-    </li>
+<h2>{{ player()!.id }} {{ player()!.nickname }}</h2>
+
+<p><strong>Clan:</strong> {{ clanName() ?? 'No clan' }}</p>
+
+<p>
+  <strong>Level:</strong>
+  {{ levelData().currentLevel.title }}
+  ({{ levelData().currentLevel.level }})
+</p>
+
+<p>{{ levelData().progress }}% to next level</p>
+
+<h4>Assigned Quests:</h4>
+@if (player()!.assignedQuests.length > 0) {
+  <ul>
+    @for (quest of player()!.assignedQuests; track quest.id) {
+      <li>
+        <strong>{{ quest.title }}</strong>
+        – {{ quest.description }} ({{ quest.xp }} XP)
+        <button (click)="completeQuest(quest)">Complete</button>
+      </li>
     }
   </ul>
-  } @else {
+} @else {
   <p>No assigned quests.</p>
-  }
+}
+
 <h4>Completed Quests:</h4>
+@if (player()!.completedQuests.length > 0) {
   <ul>
-    @if (player.assignedQuests.length > 0) {
-    <ul>
-      @for (quest of player.completedQuests; track quest.id) {
+    @for (quest of player()!.completedQuests; track quest.id) {
       <li>
-        <strong>{{ quest.title }}</strong> – {{ quest.description }} ({{ quest.xp }} XP)
+        <strong>{{ quest.title }}</strong>
+        – {{ quest.description }} ({{ quest.xp }} XP)
         <button (click)="undoQuest(quest)">Undo</button>
       </li>
-      }
-    </ul>
-    } @else {
-    <p>No completed quests.</p>
     }
   </ul>
-  <h3>Available Quests</h3>
-  @if (availableQuests.length > 0) {
-    <ul>
-      @for (quest of availableQuests; track quest.id) {
-        <li>
-          <strong>{{ quest.title }}</strong> – {{ quest.description }} ({{ quest.xp }} XP)
-          <button (click)="assignQuest(quest)">Assign</button>
-        </li>
-      }
-    </ul>
-  } @else {
-    <p>No more quests available to assign.</p>
-  }
-</ul>
+} @else {
+  <p>No completed quests.</p>
+}
+
+<h3>Available Quests</h3>
+@if (availableQuests().length > 0) {
+  <ul>
+    @for (quest of availableQuests(); track quest.id) {
+      <li>
+        <strong>{{ quest.title }}</strong>
+        – {{ quest.description }} ({{ quest.xp }} XP)
+        <button (click)="assignQuest(quest)">Assign</button>
+      </li>
+    }
+  </ul>
+} @else {
+  <p>No more quests available to assign.</p>
+}
+
 }
