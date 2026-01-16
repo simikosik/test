@@ -1,9 +1,9 @@
 
-@if (quest) {
-  <h2>{{ quest.title }}</h2>
-  @if (quest.image) {
-    <img [src]="quest.image" alt="Quest image">
+@if (quest$) {
+  <h2>{{ quest$.title }}</h2>
+  @if (quest$.image) {
+    <img [src]="quest$.image" alt="Quest image">
   }
-  <p>{{ quest.description }}</p>
-  <p><strong>XP:</strong> {{ quest.xp }}</p>
+  <p>{{ quest$.description }}</p>
+  <p><strong>XP:</strong> {{ quest$.xp }}</p>
 }
