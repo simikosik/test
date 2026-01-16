@@ -4,12 +4,12 @@ import { ClanService } from '../clan-service';
 import { ClanInterface } from '../clan-interface';
 import { FormData } from '../form-data';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
-import { form, Field, required } from '@angular/forms/signals';
+import { form, FormField, required } from '@angular/forms/signals';
 
 @Component({
   selector: 'app-clans',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule, FormsModule, Field],
+  imports: [RouterLink, ReactiveFormsModule, FormsModule, FormField],
   templateUrl: './clans.html',
 })
 export class Clans {

@@ -4,13 +4,13 @@
 
 <form>
   <label>Title:</label>
-  <input [field]="questForm.title">
+  <input [formField]="questForm.title">
 
   <label>Description:</label>
-  <input [field]="questForm.desc">
+  <input [formField]="questForm.desc">
 
   <label>XP:</label>
-  <input type="number" [field]="questForm.xp">
+  <input type="number" [formField]="questForm.xp">
 
   <button type="button" (click)="addQuest()" [disabled]="questForm().invalid()">
     Add Quest

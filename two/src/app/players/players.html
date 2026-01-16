@@ -15,7 +15,7 @@
     <h1>Player list</h1>
     <form >
       <label >Nickname:</label>
-      <input [field]="playerForm.nickname">
+      <input [formField]="playerForm.nickname">
 
       <button type="button" (click)="addPlayer()" [disabled]="playerForm().invalid()">Add player</button>
     </form>

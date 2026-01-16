@@ -4,15 +4,16 @@ import { QuestItem } from '../quest-item/quest-item';
 import { QuestService } from '../quest-service';
 import { FormData } from '../form-data';
 import { FormControl, FormGroup, ReactiveFormsModule, Validator, Validators } from '@angular/forms';
-import { form, Field, minLength, required } from '@angular/forms/signals';
+import { form, FormField, minLength, required } from '@angular/forms/signals';
 import { map, combineLatest } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { AsyncPipe } from '@angular/common';
 import { async } from 'rxjs';
+
 @Component({
   selector: 'app-quests',
 
-  imports: [QuestItem, ReactiveFormsModule, Field, AsyncPipe],
+  imports: [QuestItem, ReactiveFormsModule, FormField, AsyncPipe],
   templateUrl: './quests.html',
   styleUrl: './quests.css',
   standalone: true
@@ -42,13 +43,14 @@ export class Quests implements OnInit, OnDestroy {
 
   });
 
+  
 
 
   searchText = model<string>('');
   private searchText$ = toObservable(this.searchText);
 
   addQuest() {
-
+/*
     //const formValues = this.questForm().value();
      if (this.questForm().invalid()) return;
 
@@ -60,6 +62,18 @@ export class Quests implements OnInit, OnDestroy {
     console.log('eh questnewig.')
     this.questService.addQuest(newquest);
     this.questForm().reset();
+    */
+
+     if (this.questForm().invalid()) return;
+
+  const value = this.questForm().value();
+
+  this.questService.addQuest({
+    
+  id: Date.now(), title: value.title!, description: value.desc!, xp: value.xp!,
+  });
+
+  this.questForm().reset();
   }
 
  removeQuest(docId: string) {
@@ -76,7 +90,9 @@ export class Quests implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    console.log('Quests component initialized.');
+      this.quests$.subscribe(q => {
+    console.log('QUESTS FROM FIRESTORE:', q);
+  });
   }
 
   ngOnDestroy() {

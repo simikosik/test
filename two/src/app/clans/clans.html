@@ -3,11 +3,11 @@
 <h1>Clans</h1>
 <form>
     <label>Name:</label>
-    <input [field]="clanForm.title"/>
+    <input [formField]="clanForm.title"/>
     <label>Description:</label>
-    <input  [field]="clanForm.desc"/>
+    <input  [formField]="clanForm.desc"/>
     <label>Capacity:</label>
-    <input type="number"  [field]="clanForm.capacity" />
+    <input type="number"  [formField]="clanForm.capacity" />
     <button type="button" (click)="addClan()" [disabled]="clanForm().invalid()">Add Clan</button>
 </form>
 

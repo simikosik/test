@@ -6,13 +6,13 @@ import { PlayerService } from '../player-service';
 import { QuestService } from '../quest-service';
 
 import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
-import { form, Field, required } from '@angular/forms/signals';
+import { form, FormField, required } from '@angular/forms/signals';
 
 
 @Component({
   selector: 'app-players',
   standalone: true,
-  imports: [RouterLink, RouterModule, ReactiveFormsModule, FormsModule, Field],
+  imports: [RouterLink, RouterModule, ReactiveFormsModule, FormsModule, FormField],
   templateUrl: './players.html',
   styleUrl: './players.css'
 })
